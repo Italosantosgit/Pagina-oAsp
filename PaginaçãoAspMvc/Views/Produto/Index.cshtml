@@ -1,0 +1,65 @@
+﻿@using X.PagedList.Mvc;
+@model X.PagedList.IPagedList<PaginaçãoAspMvc.Models.Produto>
+@{
+    ViewBag.Title = "Buscar";
+}
+<h2>Produtos</h2>
+
+@using (Html.BeginForm("Index", "Produto", FormMethod.Get, new { @class = " form-group" }))
+{
+    <div class="form-group">
+        <select name="tamanhoPagina" id="tamanhoPagina" class="form-control" onchange="this.from.submit()">
+            <option value="5" @ViewBag.TamangoPagina= =5 ? selected : "">Listar 5 registros</option>
+            <option value="10" @ViewBag.TamangoPagina= =10 ? selected : "">Listar 10 registros</option>
+            <option value="15" @ViewBag.TamangoPagina= =15 ? selected : "">Listar 15 registros</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <input type="text" class="form-control pull-right" placeholder="Buscar produto..." name="busca" value="@ViewBag.Busca">
+        <span class="input-group-btn ">
+            <button class="btn btn-default" type="submit">Buscar</button>
+        </span>
+    </div>
+}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>
+                    id
+                </th>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Preço
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Preco)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+<div class="form-inline">
+    <div class="col-md-12>
+        @Html.PagedListPager(Model, pagina => Url.Action("Index", new { pagina, busca = ViewBag.Busca, tamanahoPagina = ViewBag.TamanhaPagina }))
+    </div>
+    <div class="col-md-12">
+        <span class="pull-right">
+            Listando Registros de @Model.FirstItemOnPage a @Model.LastItemOnPage de um total de @Model.TotalItemCount;
+        </span>
+    </div>
+</div>
